@@ -269,9 +269,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 });
 
-
-
-
 //show category on smartphone
 const mainNav = document.getElementById('main-nav')
 function clickCategory(){
@@ -297,3 +294,84 @@ const addToCart = (product) => {
 localStorage.setItem('userEmail', 'email@example.com');
 localStorage.setItem('userPhone', '0123456789');
 localStorage.setItem('userAddress', 'Hải Phòng');
+
+// Hàm chuyển sang form đăng ký
+function register1() {
+    document.getElementById("form-register").style.display = "block";
+    document.getElementById("form-login").style.display = "none";
+}
+
+// Hàm chuyển sang form đăng nhập
+function login1() {
+    document.getElementById("form-register").style.display = "none";
+    document.getElementById("form-login").style.display = "block";
+}
+
+// Xử lý đăng ký
+document.querySelector(".auth-form__controls .btn--primary").addEventListener("click", function() {
+    const emailInput = document.querySelector("#form-register input[type='text']").value;
+    
+    // Lưu tên người dùng vào localStorage
+    localStorage.setItem("userName", emailInput);
+    
+    // Chuyển sang form đăng nhập và tự động điền email
+    login1();
+    document.querySelector("#form-login input[type='text']").value = emailInput;
+});
+
+// Xử lý đăng nhập
+document.querySelector("#form-login .btn--primary").addEventListener("click", function() {
+    const storedUserName = localStorage.getItem("userName");
+    const enteredEmail = document.querySelector("#form-login input[type='text']").value;
+
+    if (storedUserName === enteredEmail) {
+        alert("Đăng nhập thành công!");
+
+        // Hiển thị tên người dùng và ẩn các nút Đăng nhập/Đăng ký
+        document.getElementById("userName").innerText = storedUserName;
+        document.getElementById("user-name").style.display = "block";
+        document.getElementById("login").style.display = "none";
+        document.getElementById("register").style.display = "none";
+
+        // Ẩn modal đăng nhập/đăng ký
+        document.getElementById("modal").style.display = "none";
+    } else {
+        alert("Thông tin đăng nhập không chính xác!");
+    }
+});
+
+// Xử lý hiển thị menu Đăng xuất khi nhấn vào tên người dùng
+document.getElementById("userName").addEventListener("click", function() {
+    const logoutMenu = document.getElementById("logout-menu");
+    // Toggle hiển thị menu Đăng xuất
+    if (logoutMenu.style.display === "none") {
+        logoutMenu.style.display = "block";
+    } else {
+        logoutMenu.style.display = "none";
+    }
+});
+
+// Xử lý đăng xuất
+document.getElementById("logout").addEventListener("click", function() {
+    // Xóa thông tin tên người dùng khỏi localStorage
+    localStorage.removeItem("userName");
+
+    // Đặt lại các trường trong form đăng ký và đăng nhập
+    document.querySelectorAll(".auth-form__input").forEach(function(input) {
+        input.value = ""; // Xóa tất cả các trường dữ liệu
+    });
+
+    // Hiển thị lại các nút Đăng nhập/Đăng ký
+    document.getElementById("login").style.display = "block";
+    document.getElementById("register").style.display = "block";
+
+    // Ẩn tên người dùng và menu Đăng xuất
+    document.getElementById("user-name").style.display = "none";
+    document.getElementById("logout-menu").style.display = "none";
+
+    alert("Đăng xuất thành công!");
+
+    // Chuyển về trang gốc (index.html)
+    window.location.href = "index.html"; // Chuyển hướng đến trang index (cập nhật đường dẫn nếu cần)
+});
+
